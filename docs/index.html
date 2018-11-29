@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      .rules{
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h4>The royal game of Ur</h4>
+    <button type="button" name="button" id="toggle" onclick="toggling()">Rules of the game</button>
+    <div class="rules" id="rules">
+      <ol>
+        <li>The aim of the game to get all your pieces around the board</li>
+        <li>Each player has 7 pieces</li>
+        <li>Each players roll one at a time, they may move their piece on the board based on the number rolled. Their own pieces may not overlap.</li>
+        <li>The player's pieces are safe on the top and bottom region of the board. On the central region, if an piece lands on an enemy piece, that enemy piece is sent back to the begining and off the board.</li>
+        <li>Tiles marked with a star allows you to play twice in a row and the central star tile keeps your piece safe in case the enemy piece lands on it.</li>
+      </ol>
+      <img src="./RulesSchema.jpg" alt="diagram for royal game of ur rules">
+    </div>
+    <br>
+
+    <canvas id="canvas" width="720" height="500" style="border: black 1px solid;"></canvas>
+    <div>
+      <p>Your dice roll is: <span id="diceResult"></span></p>
+    </div>
+    <div>
+      <p>Your result is: <span id="displayResult"></span></p>
+    </div>
+    <button id="whiteroll" type="button" name="button" onclick="diceroll(boardWhite, pieces, blackroll, boardOffWhite, whiteroll, piecesBlack)">Roll Player 1</button>
+    <button id="blackroll" type="button" name="button" onclick="diceroll(boardBlack, piecesBlack, whiteroll, boardOffBlack, blackroll, pieces)" disabled>Roll Player 2</button>
+    <div id="choices"></div>
+    <script src="./script.js"></script>
+    <script type="text/javascript">
+      const toggling = () => {
+        const element = document.getElementById("rules")
+        const check = element.getAttribute("class");
+        check === 'rules' ? element.setAttribute("class", "") : element.setAttribute("class", "rules") ;
+      }
+    </script>
+  </body>
+</html>
