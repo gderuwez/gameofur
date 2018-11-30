@@ -32,20 +32,39 @@ piecesBlack.name = 'piecesBlack';
 let boardCenter = new Board('boardCenter');
 
 //canvas function
-const boardPosition = [324, 252, 180, 108];
-const boardOffPosition = [612, 540];
-const boardCenterPosition = [108, 180, 252, 324, 396, 468, 540, 612];
+const boardPosition = [300, 216, 132, 48];
+const boardOffPosition = [636, 564];
+const boardCenterPosition = [48, 132, 216, 300, 384, 468, 552, 636];
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const quarterRose = () => {
   ctx.beginPath();
   ctx.moveTo(16, 36)
-  ctx.lineTo(0, 24);
+  ctx.lineTo(0, 22.5);
   ctx.lineTo(24, 24);
-  ctx.lineTo(24, 0);
+  ctx.lineTo(22.5, 0);
   ctx.lineTo(36, 16);
   ctx.stroke();
+  // ctx.beginPath();
+  // ctx.arc(36, 36, 6, 0, 3);
+  ctx.fillStyle= "red";
+  // ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(36, 35);
+  ctx.lineTo(22.5, 35);
+  ctx.lineTo(12, 28);
+  ctx.lineTo(26, 28.5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(36, 36);
+  ctx.lineTo(28, 24.5);
+  ctx.lineTo(27.5, 12);
+  ctx.lineTo(34, 22);
+  ctx.closePath();
+  ctx.fillStyle = "#2c3790";
+  ctx.fill();
 }
 const rose = (x, y) => {
   ctx.save(); //initial state 00
@@ -67,31 +86,277 @@ const rose = (x, y) => {
   ctx.restore(); //restore 00
   ctx.save(); //return at 00
 }
+const redcircle = (x, y) => {
+  ctx.beginPath();
+  ctx.arc(x, y, 6, 0, 7);
+  ctx.fillStyle= "red";
+  ctx.fill();
+}
+const squigglySquare = (x, y, z) => {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  for(let i = 1; i < 8; i++) {
+    if(i % 2 !== 0) {
+      ctx.lineTo((x+z), (y + (i * z)));
+    }
+    else {
+      ctx.lineTo(x, (y + (i * z)));
+    }
+  }
+  x = x + z;
+  y = y + (7*z);
+  for(let i = 1; i < 8; i++) {
+    if(i % 2 !== 0) {
+      ctx.lineTo((x + (i * z)), (y - z));
+    }
+    else {
+      ctx.lineTo((x + (i * z)), y);
+    }
+  }
+  x = x + (7*z);
+  y = y - z;
+  for(let i = 1; i < 8; i++) {
+    if(i % 2 !== 0) {
+      ctx.lineTo((x-z), (y - (i * z)));
+    }
+    else {
+      ctx.lineTo(x, (y - (i * z)));
+    }
+  }
+  x = x - z;
+  y = y - (7*z);
+  for(let i = 1; i < 8; i++) {
+    if(i % 2 !== 0) {
+      ctx.lineTo((x - (i * z)), (y + z));
+    }
+    else {
+      ctx.lineTo((x - (i * z)), y);
+    }
+  }
+  ctx.stroke();
+}
+const fiver = (x, y) => {
+  ctx.fillStyle = "black";
+  ctx.beginPath();
+  ctx.arc(x, y, 8, 0, 7);
+  ctx.fill();
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+  ctx.arc(x, y, 6, 0, 7);
+  ctx.fill();
+  ctx.fillStyle = "#24aae7";
+  ctx.beginPath();
+  ctx.arc(x, y, 4, 0, 7);
+  ctx.fill();
+  ctx.fillStyle = "black";
+}
+const fiveTile = (x, y) => {
+  fiver(x, y);
+  fiver((x-22), (y-22));
+  fiver((x+22), (y+22));
+  fiver((x+22), (y-22));
+  fiver((x-22), (y+22));
+}
+const smallblue = (x, y) => {
+  ctx.fillStyle = "#24aae7";
+  ctx.beginPath();
+  ctx.arc(x, y, 2.5, 0, 7);
+  ctx.fill();
+  ctx.fillStyle = "black";
+}
+const smallfive = (x, y) => {
+  smallblue(x, y);
+  smallblue((x-5.5), (y-5.5));
+  smallblue((x+5.5), (y+5.5));
+  smallblue((x+5.5), (y-5.5));
+  smallblue((x-5.5), (y+5.5));
+}
+const squaredsquare = (x, y) => {
+  ctx.beginPath();
+  ctx.strokeRect(x, y, 15, 15);
+  ctx.strokeRect((x+18), y, 15, 15);
+  ctx.strokeRect(x, (y +18), 15, 15);
+  ctx.strokeRect((x+18), (y +18), 15, 15);
+  smallblue((x+7.5), (y+7.5));
+  smallblue((x+7.5), (y+25.5));
+  smallblue((x+25.5), (y+25.5));
+
+  ctx.strokeRect((x+37), (y), 15, 15);
+  ctx.strokeRect((x+55), (y), 15, 15);
+  ctx.strokeRect((x+37), (y+18), 15, 15);
+  ctx.strokeRect((x+55), (y+18), 15, 15);
+  smallblue((x+7.5 + 55), (y+7.5));
+  smallblue((x+7.5 + 55), (y+25.5));
+  smallblue((x+7.5 + 37), (y+25.5));
+
+  ctx.strokeRect((x+37), (y +37), 15, 15);
+  ctx.strokeRect((x+55), (y +37), 15, 15);
+  ctx.strokeRect((x+37), (y+18 +37), 15, 15);
+  ctx.strokeRect((x+55), (y+18 +37), 15, 15);
+  smallblue((x+7.5 + 55), (y+7.5 +37));
+  smallblue((x+7.5 + 55), (y+25.5 + 37));
+  smallblue((x+7.5 + 37), (y+7.5 + 37));
+
+  ctx.strokeRect(x, (y +37), 15, 15);
+  ctx.strokeRect((x+18), (y+37), 15, 15);
+  ctx.strokeRect(x, (y +18 +37), 15, 15);
+  ctx.strokeRect((x+18), (y +18 +37), 15, 15);
+  smallblue((x+7.5), (y+7.5 +37));
+  smallblue((x+7.5 +18), (y+7.5 +37));
+  smallblue((x+7.5), (y+7.5 +37 +18));
+}
+const foureyes = (x, y) => {
+  ctx.beginPath();
+  ctx.moveTo((x+12), y);
+  ctx.quadraticCurveTo((x-11), (y+18), (x+12), (y+34));
+  ctx.quadraticCurveTo((x+35), (y+18), (x+12), y);
+  ctx.moveTo((x+12), (y+8));
+  ctx.quadraticCurveTo((x-3), (y+18), (x+12), (y+27));
+  ctx.quadraticCurveTo((x+27), (y+18), (x+12), (y+8));
+  ctx.fillStyle= "white";
+  ctx.fill();
+  ctx.stroke();
+}
+const eyes = (x, y) => {
+  ctx.beginPath();
+  ctx.fillStyle="black";
+  ctx.fillRect(x, y, 72, 35);
+  ctx.fillRect(x, (y+36), 72, 36);
+  ctx.fillStyle="white";
+  ctx.fillRect(x, y, 24, 34);
+  ctx.fillRect(x, (y+37), 24, 35);
+  ctx.fillRect((x+35), y, 1, 72);
+  //horizontal inner white lines
+  ctx.fillRect((x+25), y, 9, 6);
+  ctx.fillRect((x+37), y, 35, 6);
+  ctx.fillRect((x+25), (y+7), 47, 1);
+  ctx.fillRect((x+25), (y+9), 9, 3);
+  ctx.fillRect((x+37), (y+9), 35, 3);
+  ctx.fillRect((x+25), (y+13), 47, 1);
+  ctx.fillRect((x+25), (y+15), 9, 4);
+  ctx.fillRect((x+37), (y+15), 35, 4);
+  ctx.fillRect((x+25), (y+20), 47, 1);
+  ctx.fillRect((x+25), (y+22), 9, 3);
+  ctx.fillRect((x+37), (y+22), 35, 3);
+  ctx.fillRect((x+25), (y+26), 47, 1);
+  ctx.fillRect((x+25), (y+28), 9, 6);
+  ctx.fillRect((x+37), (y+28), 35, 6);
+  //horizontal white line bottom
+  ctx.fillRect((x+25), (y+37), 9, 6);
+  ctx.fillRect((x+37), (y+37), 35, 6);
+  ctx.fillRect((x+25), (y+44), 47, 1);
+  ctx.fillRect((x+25), (y+46), 9, 3);
+  ctx.fillRect((x+37), (y+46), 35, 3);
+  ctx.fillRect((x+25), (y+50), 47, 1);
+  ctx.fillRect((x+25), (y+52), 9, 4);
+  ctx.fillRect((x+37), (y+52), 35, 4);
+  ctx.fillRect((x+25), (y+57), 47, 1);
+  ctx.fillRect((x+25), (y+59), 9, 3);
+  ctx.fillRect((x+37), (y+59), 35, 3);
+  ctx.fillRect((x+25), (y+63), 47, 1);
+  ctx.fillRect((x+25), (y+65), 9, 7);
+  ctx.fillRect((x+37), (y+65), 35, 7);
+  ctx.fillRect((x+64), (y+37), 8, 34);
+  ctx.fillRect((x+64), (y), 8, 34);
+  // eyes proper
+  foureyes(x, y);
+  foureyes(x, (y+37));
+  foureyes((x+48), y);
+  foureyes((x+48), (y+37));
+  ctx.beginPath()
+  ctx.fillStyle = "#2c3790";
+  ctx.arc((x+12),(y+18), 3, 0, 7);
+  ctx.arc((x+12),(y+54), 3, 0, 7);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc((x+60),(y+18), 3, 0, 7);
+  ctx.arc((x+60),(y+54), 3, 0, 7);
+  ctx.fill();
+  ctx.fillStyle="black";
+}
 const table = () => {
-  const tileXposition = [72, 144, 216, 288, 504, 576];
-  const tileYposition = [72, 144, 216];
-  const middleXposition = [360, 432];
-  const middleYposition = [144];
+  const tileXposition = [12, 96, 180, 264, 516, 600];
+  const tileYposition = [12, 96, 180];
+  const middleXposition = [348, 432];
+  const middleYposition = [96];
+
+  ctx.fillStyle = "#2c3790";
+  ctx.fillRect(0, 0, 348, 264);
+  ctx.fillRect(348, 84, 156, 96);
+  ctx.fillRect(504, 0,  180, 264);
+
+  ctx.fillStyle = "white";
 
   tileXposition.forEach(x => {
     tileYposition.forEach(y => {
-      ctx.strokeRect(x, y, 72, 72);
+      ctx.fillRect(x, y, 72, 72);
     })
   })
 
   middleXposition.forEach(x => {
     middleYposition.forEach(y => {
-      ctx.strokeRect(x, y, 72, 72);
+      ctx.fillRect(x, y, 72, 72);
     })
   })
 }
+const foursqui = (x, y, z) => {
+  squigglySquare(x, y, z);
+  squigglySquare((x+36.7), y, z);
+  squigglySquare((x+36.7), (y+37.3), z);
+  squigglySquare(x, (y+37.3), z);
+  smallfive((x+17.15), (y+13));
+  smallfive((x+53.85), (y+13));
+  smallfive((x+53.85), (y+50.3));
+  smallfive((x+17.15), (y+50.3));
+  ctx.beginPath();
+  ctx.moveTo((x+36), (y-4));
+  ctx.lineTo((x+36), (y+68));
+  ctx.moveTo((x),(y+32));
+  ctx.lineTo((x+72), (y+32));
+  ctx.stroke();
+}
 const completeBoard = () => {
   table();
-  rose(72, 72);
-  rose(72, 216);
-  rose(288, 144);
-  rose(504, 72);
-  rose(504, 216);
+  //rose tiles
+  rose(12, 12);
+  redcircle(48, 48);
+  rose(12, 180);
+  redcircle(48, 216);
+  rose(264, 96);
+  redcircle(300, 132);
+  rose(516, 12);
+  redcircle(552, 48);
+  rose(516, 180);
+  redcircle(552, 216);
+  // five tiles
+  fiveTile(216, 48);
+  fiveTile(132, 132);
+  fiveTile(384, 132);
+  fiveTile(636, 132);
+  fiveTile(216, 216);
+  // squiggly square big
+  squigglySquare(604, 24, 8);
+  squigglySquare(604, 192, 8);
+  // squiggly in bigger squiggly
+  squigglySquare(620, 36, 4);
+  squigglySquare(620, 204, 4);
+  //small five dots in small squiggly
+  smallfive(636, 48);
+  smallfive(636, 216);
+  //four squiggly and blue dots
+  foursqui(432, 100, 4.3);
+  foursqui(180, 100, 4.3);
+  //squaredsquares
+  squaredsquare(13, 97);
+  //eyes
+  eyes(96, 12);
+  eyes(96, 180);
+  eyes(264, 180);
+  eyes(516, 96);
+  ctx.save();
+  ctx.rotate((Math.PI / 180) * 180);
+  eyes(-336, -84);
+  ctx.restore();
 }
 const smallcircle = (x, y) => {
   ctx.beginPath();
@@ -123,7 +388,7 @@ const actualBoard = () => {
 
   // white pieces
   pieces.forEach(piece => {
-    bigcircle('white', piece.x, piece.y, 'black');
+    bigcircle('lightgrey', piece.x, piece.y, 'black');
   })
 }
 
@@ -131,7 +396,9 @@ const actualBoard = () => {
 let choices = [];
 
 //before any dice roll
-actualBoard();
+window.requestAnimationFrame(actualBoard);
+//actualBoard();
+
 //boardChoice, pieceColor, buttonColor, board2
 const diceroll = (...args) => {
   if(choices.length === 0) {
@@ -295,22 +562,61 @@ const choosing = (...args) => {
   }
 
   if(args[1] > 4 && args[1] < 13) {
-    yCoord = 180;
+    yCoord = 132;
   }
   else if (args[4].name === 'pieces') {
-    yCoord = 252;
+    yCoord = 216;
   }
   else {
-    yCoord = 108;
+    yCoord = 48;
   }
-
-  args[4][args[0]].x = xCoord;
-  args[4][args[0]].y = yCoord;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  actualBoard();
 
   document.getElementById("choices").innerHTML = "";
   document.getElementById("diceResult").innerHTML = "";
   document.getElementById("displayResult").innerHTML = "";
+
+  //pure left
+  // function loop() {
+  //   if(args[4][args[0]].x !== xCoord) {
+  //     args[4][args[0]].x --;
+  //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //     actualBoard();
+  //   }
+  //   else {
+  //     console.log("done");
+  //     clearInterval(timer);
+  //   }
+  // }
+  //
+  // //initial animation
+  // //white
+  // if(args[4][args[0]].y === 422) {
+  //   args[4][args[0]].y = 216;
+  //   args[4][args[0]].x = 384;
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //   actualBoard();
+  //   var timer = setInterval(loop,1);
+  // }
+  // //black
+  // if(args[4][args[0]].y === 350) {
+  //   args[4][args[0]].y = 48;
+  //   args[4][args[0]].x = 384;
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //   actualBoard();
+  //   var timer = setInterval(loop,1);
+  // }
+  //
+  // //if piece on start board and stay on it
+  // if(args[4][args[0]].y === 216 && yCoord !== 132) {
+  //   var timer = setInterval(loop,1);
+  // }
+  // if (args[4][args[0]].y === 48 && yCoord !== 132) {
+  //   var timer = setInterval(loop,1);
+  // }
+
+  args[4][args[0]].y = yCoord;
+  args[4][args[0]].x = xCoord;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  actualBoard();
+
 }
