@@ -14,28 +14,23 @@ class Board {
     this.name = name;
   }
 }
-
 //player 1 specific
 let boardWhite = new Board('boardWhite');
 let boardOffWhite = new Board('boardOffWhite');
-
 let pieces = [new Piece(144, 422), new Piece(216, 422), new Piece(288, 422), new Piece(360, 422), new Piece(432, 422), new Piece(504, 422), new Piece(576, 422)];
 pieces.name = 'pieces';
-
 //player 2 specific
 let boardBlack = new Board('boardBlack');
 let boardOffBlack = new Board('boardOffBlack');
 let piecesBlack = [new Piece(144, 350), new Piece(216, 350), new Piece(288, 350), new Piece(360, 350), new Piece(432, 350), new Piece(504, 350), new Piece(576, 350)];
 piecesBlack.name = 'piecesBlack';
-
 //common for each
 let boardCenter = new Board('boardCenter');
-
 //canvas function
 const boardPosition = [300, 216, 132, 48];
-const boardOffPosition = [636, 564];
+const boardOffPosition = [636, 552, 468];
 const boardCenterPosition = [48, 132, 216, 300, 384, 468, 552, 636];
-
+//canvas display
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const quarterRose = () => {
@@ -391,14 +386,10 @@ const actualBoard = () => {
     bigcircle('lightgrey', piece.x, piece.y, 'black');
   })
 }
-
 // actual functions
 let choices = [];
-
 //before any dice roll
-window.requestAnimationFrame(actualBoard);
-//actualBoard();
-
+actualBoard();
 //boardChoice, pieceColor, buttonColor, board2
 const diceroll = (...args) => {
   if(choices.length === 0) {
@@ -455,8 +446,12 @@ const diceroll = (...args) => {
         let text = document.createTextNode("move piece " + (parseInt(Object.keys(choice)) + 1) + " to tile n° " + choice[Object.keys(choice)][0]);
         button.appendChild(text);
 
-        let valueFunction = "choosing(" + Object.keys(choice) + ", " + choice[Object.keys(choice)][0] + ", " + choice[Object.keys(choice)][1] + ", " + args[0].name + ", " + args[1].name + ", " + args[3].name + ", " + args[2].id + ", " + args[4].id + ", " + args[5].name +")"
+        let valueFunction = "choosing(" + Object.keys(choice) + ", " + choice[Object.keys(choice)][0] + ", " + choice[Object.keys(choice)][1] + ", " + args[0].name + ", " + args[1].name + ", " + args[3].name + ", " + args[2].id + ", " + args[4].id + ", " + args[5].name +")";
+        let valueFunction2 = "hovering("+choice[Object.keys(choice)][0] +", " + args[1].name + ", " + Object.keys(choice) + ")";
+        let valueFunction3 = "unhovering()";
         button.setAttribute("onclick", valueFunction);
+        button.setAttribute("onmouseover", valueFunction2);
+        button.setAttribute("onmouseleave", valueFunction3)
         document.getElementById("choices").appendChild(button);
       })
     }
@@ -469,12 +464,14 @@ const diceroll = (...args) => {
     alert("make a choice first");
   }
 }
-
 //end of diceroll
+var timer;
 
 const choosing = (...args) => {
   choices = [];
-
+  ctx.strokeStyle = "black";
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  actualBoard();
   args[4][args[0]].place = args[1];
 
   switch (args[2]) {
@@ -576,47 +573,245 @@ const choosing = (...args) => {
   document.getElementById("displayResult").innerHTML = "";
 
   //pure left
-  // function loop() {
-  //   if(args[4][args[0]].x !== xCoord) {
-  //     args[4][args[0]].x --;
-  //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //     actualBoard();
-  //   }
-  //   else {
-  //     console.log("done");
-  //     clearInterval(timer);
-  //   }
-  // }
-  //
-  // //initial animation
-  // //white
-  // if(args[4][args[0]].y === 422) {
-  //   args[4][args[0]].y = 216;
-  //   args[4][args[0]].x = 384;
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   actualBoard();
-  //   var timer = setInterval(loop,1);
-  // }
-  // //black
-  // if(args[4][args[0]].y === 350) {
-  //   args[4][args[0]].y = 48;
-  //   args[4][args[0]].x = 384;
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   actualBoard();
-  //   var timer = setInterval(loop,1);
-  // }
-  //
-  // //if piece on start board and stay on it
-  // if(args[4][args[0]].y === 216 && yCoord !== 132) {
-  //   var timer = setInterval(loop,1);
-  // }
-  // if (args[4][args[0]].y === 48 && yCoord !== 132) {
-  //   var timer = setInterval(loop,1);
-  // }
+  function loop() {
+    if(args[4][args[0]].x !== xCoord) {
+      args[4][args[0]].x --;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      actualBoard();
+    }
+    else {
+      clearInterval(timer);
+      if(xCoord === 468) {args[4][args[0]].x = 100000;}
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      actualBoard();
+      console.log("done");
+    }
+  }
+  //pure right
+  function loopRight() {
+    if(args[4][args[0]].x !== xCoord) {
+      args[4][args[0]].x ++;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      actualBoard();
+    }
+    else {
+      clearInterval(timer);
+      console.log("done");
+    }
+  }
+  function fourToCenter() {
+    if (args[4][args[0]].x !== 48 && args[4][args[0]].y !== 132) {
+      args[4][args[0]].x --;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      actualBoard();
+    }
+    else {
+      if (args[4].name === "piecesBlack") {
+        if (args[4][args[0]].y !== yCoord) {
+          args[4][args[0]].y ++;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          actualBoard();
+        }
+        else if(args[4][args[0]].x !== xCoord){
+          args[4][args[0]].x ++;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          actualBoard();
+        }
+        else {
+          console.log("done");
+          clearInterval(timer);
+        }
+      }
+      else {
+        if (args[4][args[0]].y !== yCoord) {
+          args[4][args[0]].y --;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          actualBoard();
+        }
+        else if(args[4][args[0]].x !== xCoord){
+          args[4][args[0]].x ++;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          actualBoard();
+        }
+        else {
+          console.log("done");
+          clearInterval(timer);
+        }
+      }
+    }
+  }
+  function centerToOuter() {
+    if (args[4][args[0]].x !== 636 && args[4][args[0]].y === 132) {
+      args[4][args[0]].x ++;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      actualBoard();
+    }
+    else {
+      if (args[4].name === "piecesBlack") {
+        if (args[4][args[0]].y !== yCoord) {
+          args[4][args[0]].y --;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          actualBoard();
+        }
+        else if(args[4][args[0]].x !== xCoord){
+          args[4][args[0]].x --;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          actualBoard();
+        }
+        else {
+          console.log("done");
+          clearInterval(timer);
+        }
+      }
+      else {
+        if (args[4][args[0]].y !== yCoord) {
+          args[4][args[0]].y ++;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          actualBoard();
+        }
+        else if(args[4][args[0]].x !== xCoord){
+          args[4][args[0]].x --;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          actualBoard();
+        }
+        else {
+          console.log("done");
+          clearInterval(timer);
+        }
+      }
+    }
+  }
 
-  args[4][args[0]].y = yCoord;
-  args[4][args[0]].x = xCoord;
+  //if pieces are on outer boards and stay on it
+  if(args[4][args[0]].y === 216 && yCoord === 216) {
+    timer = setInterval(loop,1);
+  }
+  else if (args[4][args[0]].y === 48 && yCoord === 48) {
+    timer = setInterval(loop,1);
+  }
+  //if pieces are on center board and stay on it
+  else if(args[4][args[0]].y === 132 && yCoord === 132) {
+    timer = setInterval(loopRight,1);
+  }
+  //if piece move to center board
+  else if(args[4][args[0]].y !== 132 && yCoord === 132) {
+    timer = setInterval(fourToCenter);
+  }
+  //if pieces are on center board and move to outer board
+  else if (args[4][args[0]].y === 132 && yCoord !== 132) {
+    timer = setInterval(centerToOuter, 1);
+  }
+  //initial animation
+    //white
+  else if(args[4][args[0]].y === 422) {
+    args[4][args[0]].y = 216;
+    args[4][args[0]].x = 384;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    actualBoard();
+    timer = setInterval(loop, 1);
+  }
+    //black
+  else if(args[4][args[0]].y === 350) {
+    args[4][args[0]].y = 48;
+    args[4][args[0]].x = 384;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    actualBoard();
+    timer = setInterval(loop,1);
+  }
+
+}
+
+const hovering = (destination, color, pieceIndex) => {
+  let xOrigin = color[pieceIndex].x;
+  let yOrigin = color[pieceIndex].y;
+  let xDest;
+  let yDest;
+
+  if(color.name === "pieces") {
+    switch (destination) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 13:
+      case 14:
+      case 15:
+        yDest = 216;
+        break;
+      default:
+        yDest = 132;
+    }
+  }
+  else {
+    switch (destination) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 13:
+      case 14:
+      case 15:
+        yDest = 48;
+        break;
+      default:
+        yDest = 132;
+    }
+  }
+
+  switch (destination) {
+    case 1:
+    case 8:
+      xDest = 300;
+      break;
+    case 2:
+    case 7:
+      xDest = 216;
+      break;
+    case 3:
+    case 6:
+      xDest = 132;
+      break;
+    case 4:
+    case 5:
+      xDest = 48;
+      break;
+    case 9:
+      xDest = 384;
+      break;
+    case 10:
+    case 15:
+      xDest = 468;
+      break;
+    case 11:
+    case 14:
+      xDest = 552;
+      break;
+    case 12:
+    case 13:
+      xDest = 636;
+      break;
+    default:
+  }
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   actualBoard();
+  ctx.beginPath();
+  ctx.arc(xOrigin, yOrigin, 31, 0, 7);
+  ctx.arc(xOrigin, yOrigin, 32, 0, 7);
+  ctx.arc(xOrigin, yOrigin, 33, 0, 7);
+  ctx.strokeStyle = "green";
+  ctx.stroke();
+  if (color.name === "pieces") {
+    bigcircle("rgba(192, 192, 192, 0.8)", xDest, yDest, "rgba(0, 0, 0, 0.8)");
+  }
+  else {
+    bigcircle("rgba(0, 0, 0, 0.8)", xDest, yDest, "rgba(255, 255, 255, 0.8)");
+  }
+}
 
+const unhovering = () => {
+  console.log("refresh");
+  ctx.strokeStyle = "black";
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  actualBoard();
 }
