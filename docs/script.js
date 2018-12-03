@@ -434,6 +434,9 @@ const diceroll = (...args) => {
 
         if(nOrigin <= 15) {
           if( exceptCurrent.every(test) ) {
+            if(nOrigin === 8 & boardCenter.occupied.find(item => {return item === 8}) === 8) {
+              nOrigin ++;
+            }
             choices.push({[pieceNum] : [nOrigin, origin]});
           }
         }
@@ -525,19 +528,20 @@ const choosing = (...args) => {
   }
   else {
     xCoord = boardCenterPosition[(args[1] - 5)];
-    console.log(boardCenter.occupied);
     boardCenter.occupied.forEach((tile, index) => {
       if(tile === args[2]) {
         boardCenter.occupied.splice(index, 1);
       }
       if(tile === args[1]) {
-        console.log("on occupied square");
+        if (tile === 8) {
+          args[1] = 9;
+          xCoord = boardCenterPosition[(args[1] - 5)];
+        }
         args[8].forEach((item) => {
           if(item.place === args[1]) {
             item.place = 0;
             item.x = item.initalX;
             item.y = item.initialY;
-            console.log("piece was knocked back to 0");
           }
         })
       }
@@ -584,7 +588,6 @@ const choosing = (...args) => {
       if(xCoord === 468) {args[4][args[0]].x = 100000;}
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       actualBoard();
-      console.log("done");
     }
   }
   //pure right
@@ -596,7 +599,6 @@ const choosing = (...args) => {
     }
     else {
       clearInterval(timer);
-      console.log("done");
     }
   }
   function fourToCenter() {
@@ -618,7 +620,6 @@ const choosing = (...args) => {
           actualBoard();
         }
         else {
-          console.log("done");
           clearInterval(timer);
         }
       }
@@ -634,7 +635,6 @@ const choosing = (...args) => {
           actualBoard();
         }
         else {
-          console.log("done");
           clearInterval(timer);
         }
       }
@@ -659,7 +659,6 @@ const choosing = (...args) => {
           actualBoard();
         }
         else {
-          console.log("done");
           clearInterval(timer);
         }
       }
@@ -675,7 +674,6 @@ const choosing = (...args) => {
           actualBoard();
         }
         else {
-          console.log("done");
           clearInterval(timer);
         }
       }
@@ -760,8 +758,18 @@ const hovering = (destination, color, pieceIndex) => {
 
   switch (destination) {
     case 1:
-    case 8:
       xDest = 300;
+      break;
+    case 8:
+      let test = boardCenter.occupied.find(item => {
+        return item === 8;
+      })
+      if(test === 8) {
+        xDest = 384;
+      }
+      else {
+        xDest = 300;
+      }
       break;
     case 2:
     case 7:
@@ -810,7 +818,6 @@ const hovering = (destination, color, pieceIndex) => {
 }
 
 const unhovering = () => {
-  console.log("refresh");
   ctx.strokeStyle = "black";
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   actualBoard();
