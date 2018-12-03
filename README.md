@@ -3,7 +3,7 @@
 - **When ?** : 26/11 - 29/11/2018
 - **Who ?** :
   - [Guillaume Deruwez](https://github.com/gderuwez) : Everything
-- **The app** : https://gderuwez.github.io/Meteor-Api-FrontEnd/
+- **The app** : https://gderuwez.github.io/gameofur/
 
 
 ## Specifications :
