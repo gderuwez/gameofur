@@ -41,10 +41,7 @@ const quarterRose = () => {
   ctx.lineTo(22.5, 0);
   ctx.lineTo(36, 16);
   ctx.stroke();
-  // ctx.beginPath();
-  // ctx.arc(36, 36, 6, 0, 3);
   ctx.fillStyle= "red";
-  // ctx.fill();
   ctx.beginPath();
   ctx.moveTo(36, 35);
   ctx.lineTo(22.5, 35);
@@ -413,6 +410,7 @@ const diceroll = (...args) => {
     }
     result.forEach(item => {
       display += item;
+      // display = 1;
     })
 
     document.getElementById("diceResult").innerHTML = result;
