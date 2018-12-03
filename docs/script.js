@@ -410,7 +410,6 @@ const diceroll = (...args) => {
     }
     result.forEach(item => {
       display += item;
-      //display = 3;
     })
 
     document.getElementById("diceResult").innerHTML = result;
@@ -470,6 +469,8 @@ const diceroll = (...args) => {
 var timer;
 
 const choosing = (...args) => {
+  args[7].setAttribute("disabled", '');
+
   choices = [];
   ctx.strokeStyle = "black";
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -557,12 +558,6 @@ const choosing = (...args) => {
   }
   else if(args[1] === 15) {
     alert("piece is home");
-    args[6].removeAttribute("disabled");
-    args[7].setAttribute("disabled", "");
-  }
-  else {
-    args[6].removeAttribute("disabled", false);
-    args[7].setAttribute("disabled", "");
   }
 
   if(args[1] > 4 && args[1] < 13) {
@@ -588,6 +583,7 @@ const choosing = (...args) => {
     }
     else {
       clearInterval(timer);
+      args[6].removeAttribute("disabled");
       if(xCoord === 468) {args[4][args[0]].x = 100000;}
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       actualBoard();
@@ -602,6 +598,7 @@ const choosing = (...args) => {
     }
     else {
       clearInterval(timer);
+      args[6].removeAttribute("disabled");
     }
   }
   function fourToCenter() {
@@ -624,6 +621,7 @@ const choosing = (...args) => {
         }
         else {
           clearInterval(timer);
+          args[6].removeAttribute("disabled");
         }
       }
       else {
@@ -639,6 +637,7 @@ const choosing = (...args) => {
         }
         else {
           clearInterval(timer);
+          args[6].removeAttribute("disabled");
         }
       }
     }
@@ -663,6 +662,7 @@ const choosing = (...args) => {
         }
         else {
           clearInterval(timer);
+          args[6].removeAttribute("disabled");
         }
       }
       else {
@@ -678,6 +678,7 @@ const choosing = (...args) => {
         }
         else {
           clearInterval(timer);
+          args[6].removeAttribute("disabled");
         }
       }
     }
@@ -719,7 +720,6 @@ const choosing = (...args) => {
     actualBoard();
     timer = setInterval(loop,1);
   }
-
 }
 
 const hovering = (destination, color, pieceIndex) => {
