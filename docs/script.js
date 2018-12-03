@@ -409,8 +409,8 @@ const diceroll = (...args) => {
       }
     }
     result.forEach(item => {
-      display += item;
-      // display = 1;
+      //display += item;
+      display = 3;
     })
 
     document.getElementById("diceResult").innerHTML = result;
@@ -442,6 +442,7 @@ const diceroll = (...args) => {
           break;
         }
       }
+      console.log(boardOffPosition.occupied);
       choices.forEach(choice => {
         let button = document.createElement("BUTTON");
         let text = document.createTextNode("move piece " + (parseInt(Object.keys(choice)) + 1) + " to tile n° " + choice[Object.keys(choice)][0]);
@@ -473,7 +474,11 @@ const choosing = (...args) => {
   ctx.strokeStyle = "black";
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   actualBoard();
-  args[4][args[0]].place = args[1];
+  if(args[1] !== 15) {args[4][args[0]].place = args[1];}
+  else {
+    args[4][args[0]].place = 32;
+  }
+
 
   switch (args[2]) {
     case 0:
@@ -521,7 +526,7 @@ const choosing = (...args) => {
     xCoord = boardPosition[(args[1] - 1)];
   }
   else if(args[1] === 13 || args[1] === 14 || args[1] === 15) {
-    args[5].occupied.push(args[1]);
+    if(args[1] !== 15) {args[5].occupied.push(args[1]); }
     xCoord = boardOffPosition[(args[1] - 13)];
   }
   else {
