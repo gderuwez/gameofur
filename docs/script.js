@@ -409,8 +409,8 @@ const diceroll = (...args) => {
       }
     }
     result.forEach(item => {
-      //display += item;
-      display = 3;
+      display += item;
+      //display = 3;
     })
 
     document.getElementById("diceResult").innerHTML = result;
